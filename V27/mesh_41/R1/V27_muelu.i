@@ -28,7 +28,7 @@ linear_solvers:
 realms:
 
   - name: realm_1
-    mesh: mesh/Complete_System41_Combined_R1.exo
+    mesh: ../../../meshes/V27/V27_41_R1.exo
     use_edges: no       
     activate_aura: no
     automatic_decomposition_type: rcb
@@ -210,7 +210,7 @@ realms:
       target_name: [surface_11, surface_12, surface_13]
 
     output:
-      output_data_base_name: output/fullV27_41_R1.e
+      output_data_base_name: out_muelu/fullV27_41_R1.e
       output_frequency: 50 
       output_node_set: no 
       output_variables:
@@ -219,7 +219,7 @@ realms:
        - mesh_displacement
 
     restart:
-      restart_data_base_name: restart/fullV27_41_R1.rst
+      restart_data_base_name: rst_muelu/fullV27_41_R1.rst
       restart_frequency: 200
       restart_start: 200
       restart_forced_wall_time: 47.8

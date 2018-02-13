@@ -48,7 +48,7 @@ linear_solvers:
 realms:
 
   - name: realm_1
-    mesh: mesh/CompleteSystem41a_Combined.exo 
+    mesh: ../../../meshes/V27/V27_41a_R0.exo 
     use_edges: no       
     activate_aura: no
     check_for_missing_bcs: yes 
@@ -236,7 +236,7 @@ realms:
       target_name: [surface_11, surface_12, surface_13]
 
     output:
-      output_data_base_name: output/fullV27_41a_R1.e
+      output_data_base_name: out_hypre/fullV27_41a_R1.e
       output_frequency: 51 
       output_node_set: no 
       output_variables:
@@ -246,7 +246,7 @@ realms:
        - turbulent_viscosity
 
     restart:
-      restart_data_base_name: restart/fullV27_41a_R1.rst
+      restart_data_base_name: rst_hypre/fullV27_41a_R1.rst
       restart_frequency: 500
       restart_start: 500
       restart_forced_wall_time: 47.8
