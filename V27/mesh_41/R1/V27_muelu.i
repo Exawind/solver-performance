@@ -23,7 +23,7 @@ linear_solvers:
     kspace: 50
     output_level: 0
     summarize_muelu_timer: no
-    muelu_xml_file_name: muelu-l1gs4-drop0.02-unsmoo-noqr-quiet.xml
+    muelu_xml_file_name: muelu-l1gs2-drop0.03-unsmoo-noqr-rebaltarg10k-explR-rebalPR-aggsize.xml
 
 realms:
 
