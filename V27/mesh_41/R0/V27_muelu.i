@@ -230,7 +230,7 @@ Time_Integrators:
       name: ti_1
       start_time: 0
       termination_step_count: 20
-      time_step: 1.0e-5 
+      time_step: 5.0e-6 
       time_stepping_type: adaptive
       time_step_count: 0
       second_order_accuracy: no 
