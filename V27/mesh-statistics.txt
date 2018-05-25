@@ -1,0 +1,14 @@
+# node and element counts from ncdump
+
+V27_41_R0
+   num_nodes =   28876687 ;
+   num_elem =    66772877 ;
+V27_41a_R0
+   num_nodes =   45715270 ;
+   num_elem =   166672766 ;
+V27_41_R1
+   num_nodes =  229267585 ;
+   num_elem =   541009944 ;
+V27_41a_R1
+   num_nodes =  363397792 ;
+   num_elem =  1340197262 ;
