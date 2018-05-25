@@ -10,7 +10,7 @@ linear_solvers:
     method: gmres
     preconditioner: sgs 
     tolerance: 1e-5
-    max_iterations: 300
+    max_iterations: 200
     kspace: 75
     output_level: 0
 
@@ -19,11 +19,11 @@ linear_solvers:
     method: gmres
     preconditioner: muelu
     tolerance: 1e-5
-    max_iterations: 300
+    max_iterations: 200
     kspace: 50
     output_level: 0
     summarize_muelu_timer: no
-    muelu_xml_file_name: muelu-l1gs4-drop0.02-unsmoo-noqr.xml
+    muelu_xml_file_name: muelu-l1gs2-drop0.03-unsmoo-noqr-rebaltarg10k-explR-rebalPR-aggsize.xml
 
 realms:
 
@@ -194,7 +194,7 @@ realms:
             upwind_advection: yes 
             current_normal: yes 
             include_png_penalty: no
-            activate_coincident_node_error_check: no 
+            activate_coincident_node_error_check: yes
           
         - shifted_gradient_operator:
             velocity: no
@@ -221,8 +221,8 @@ realms:
 
     restart:
       restart_data_base_name: rst_muelu/fullV27_41_R2.rst
-      restart_frequency: 10000
-      restart_start: 10000
+      restart_frequency: 200
+      restart_start: 200
       restart_forced_wall_time: 47.8
  
 Time_Integrators:
