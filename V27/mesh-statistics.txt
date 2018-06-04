@@ -1,14 +1,14 @@
-# node and element counts from ncdump
+# node and element counts from ncdump (modified to add commas)
 
 V27_41_R0
-   num_nodes =   28876687 ;
-   num_elem =    66772877 ;
+   num_nodes =    28,876,687 ;
+   num_elem =     66,772,877 ;
 V27_41a_R0
-   num_nodes =   45715270 ;
-   num_elem =   166672766 ;
+   num_nodes =    45,715,270 ;
+   num_elem =    166,672,766 ;
 V27_41_R1
-   num_nodes =  229267585 ;
-   num_elem =   541009944 ;
+   num_nodes =   229,267,585 ;
+   num_elem =    541,009,944 ;
 V27_41a_R1
-   num_nodes =  363397792 ;
-   num_elem =  1340197262 ;
+   num_nodes =   363,397,792 ;
+   num_elem =  1,340,197,262 ;
