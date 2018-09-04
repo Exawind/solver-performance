@@ -37,12 +37,12 @@ linear_solvers:
     #bamg_interp_type: 13
     bamg_cycle_type:  1
     #bamg_relax_type: 3
-    #bamg_relax_type: 8
-    bamg_relax_type: 18
+    bamg_relax_type: 8
+    #bamg_relax_type: 18
     #bamg_relax_order: 1
     bamg_relax_order: 0
-    #bamg_num_sweeps: 1
-    bamg_num_sweeps: 3
+    bamg_num_sweeps: 1
+    #bamg_num_sweeps: 3
     #bamg_num_sweeps: 2
     bamg_keep_transpose: 1
     bamg_max_levels: 10
