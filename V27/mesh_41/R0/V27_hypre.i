@@ -28,8 +28,8 @@ linear_solvers:
     write_matrix_files: off
     bamg_output_level: 1
     bamg_coarsen_type: 8
-    #bamg_interp_type: 6
-    bamg_interp_type: 13
+    bamg_interp_type: 6
+    #bamg_interp_type: 13
     bamg_cycle_type:  1
     bamg_relax_type: 3
     bamg_relax_order: 1
