@@ -45,7 +45,7 @@ linear_solvers:
     #bamg_num_sweeps: 3
     #bamg_num_sweeps: 2
     bamg_keep_transpose: 1
-    bamg_max_levels: 10
+    bamg_max_levels: 8
     #bamg_trunc_factor: 0.1
     bamg_trunc_factor: 0.5
     #bamg_trunc_factor: 0.25
