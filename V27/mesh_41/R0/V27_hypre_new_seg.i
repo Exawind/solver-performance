@@ -7,7 +7,7 @@ linear_solvers:
 
   - name: hypre_solver
     type: hypre
-    method: hypre_gmres
+    method: hypre_bicgstab
     preconditioner: boomerAMG
     tolerance: 1e-5
     max_iterations: 100
