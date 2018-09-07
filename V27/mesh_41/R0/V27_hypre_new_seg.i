@@ -7,7 +7,7 @@ linear_solvers:
 
   - name: hypre_solver
     type: hypre
-    method: hypre_bicgstab
+    method: hypre_gmres
     preconditioner: boomerAMG
     tolerance: 1e-5
     max_iterations: 100
@@ -18,7 +18,7 @@ linear_solvers:
     bamg_output_level: 0
     #bamg_coarsen_type: 8
     bamg_max_levels: 1
-    #bamg_relax_type: 6
+    bamg_relax_type: 6
     bamg_num_sweeps: 1
 
   - name: solve_cont
@@ -32,7 +32,8 @@ linear_solvers:
     kspace: 20
     output_level: 0
     bamg_output_level: 1
-    bamg_coarsen_type: 8
+    bamg_coarsen_type: 10
+    #bamg_coarsen_type: 8
     bamg_interp_type: 6
     #bamg_interp_type: 13
     bamg_cycle_type:  1
@@ -47,7 +48,7 @@ linear_solvers:
     bamg_keep_transpose: 1
     bamg_max_levels: 6
     #bamg_trunc_factor: 0.1
-    bamg_trunc_factor: 0.5
+    bamg_trunc_factor: 0.75
     #bamg_trunc_factor: 0.25
     #bamg_agg_num_levels: 2
     bamg_agg_num_levels: 1
