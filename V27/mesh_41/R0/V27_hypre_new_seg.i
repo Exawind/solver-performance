@@ -52,8 +52,8 @@ linear_solvers:
     #bamg_agg_num_levels: 2
     bamg_agg_num_levels: 1
     bamg_agg_interp_type: 4
-    bamg_agg_pmax_elmts: 2
-    bamg_pmax_elmts: 3
+    bamg_agg_pmax_elmts: 3
+    bamg_pmax_elmts: 2
     #bamg_strong_threshold: 0.25
     bamg_strong_threshold: 0.5
     #bamg_non_galerkin_tol: 0.05
