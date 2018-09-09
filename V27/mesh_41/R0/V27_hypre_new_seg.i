@@ -32,6 +32,7 @@ linear_solvers:
     kspace: 20
     output_level: 0
     bamg_output_level: 1
+    # coarsen_type: 10 HMIS for MPI, coarsen_type: 8 PMIS for MPI+X
     bamg_coarsen_type: 10
     #bamg_coarsen_type: 8
     bamg_interp_type: 6
