@@ -48,7 +48,7 @@ linear_solvers:
     #bamg_num_sweeps: 2
     bamg_keep_transpose: 1
     # optimal for < 30K DOF per core use max_levels: 5, 6, or 7 for fewer MPI, ranks
-    bamg_max_levels: 4
+    bamg_max_levels: 5
     #bamg_trunc_factor: 0.1
     bamg_trunc_factor: 0.75
     #bamg_trunc_factor: 0.25
