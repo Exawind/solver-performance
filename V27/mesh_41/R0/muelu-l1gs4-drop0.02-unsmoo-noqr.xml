@@ -8,8 +8,9 @@
 
   <Parameter        name="smoother: type"                   type="string"   value="RELAXATION"/>
   <ParameterList    name="smoother: params">
-     <Parameter name="relaxation: type"      type="string"   value="Symmetric Gauss-Seidel"/>
-     <Parameter name="relaxation: sweeps"    type="int"      value="1"/>
+     <Parameter     name="relaxation: type"                 type="string"   value="Gauss-Seidel"/>
+     <Parameter     name="relaxation: use l1"               type="bool"     value="true"/>
+     <Parameter     name="relaxation: sweeps"               type="int"      value="4"/>
   </ParameterList>
 
   <Parameter        name="sa: damping factor"               type="double"   value="0."/>
