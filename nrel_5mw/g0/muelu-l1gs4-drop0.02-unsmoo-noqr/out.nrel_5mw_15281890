@@ -1,0 +1,11 @@
+Working dir    = /global/cscratch1/sd/mlawson/g0
+Nalu exec      = /project/projectdirs/m2853/shreyas/exawind/install/nalu-wind/bin/naluX
+Nalu input     = nrel_5mw_g0.timing.i
+Nalu log       = nrel_5mw_g0.timing.log
+Num. nodes     = 64
+Num. MPI Ranks = 2048
+Num. threads   = 1
+slurmstepd: error: *** STEP 15281890.0 ON nid01566 CANCELLED AT 2018-09-28T01:01:41 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 15281890 ON nid01566 CANCELLED AT 2018-09-28T01:01:41 DUE TO TIME LIMIT ***
+srun: got SIGCONT
+srun: forcing job termination

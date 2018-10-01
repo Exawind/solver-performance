@@ -1,0 +1,15 @@
+Working dir    = /global/cscratch1/sd/mlawson/gTest
+Input file     = nrel_5mw_gCoarse.i
+Num. nodes     = 26
+Num. MPI Ranks = 832
+Num. threads   = 1
+IOSS: Adding property 'INTEGER_SIZE_DB' with value '8'
+IOSS: Adding property 'INTEGER_SIZE_API' with value '8'
+IOSS: Adding property 'INTEGER_SIZE_DB' with value '8'
+IOSS: Adding property 'INTEGER_SIZE_API' with value '8'
+IOSS: Adding property 'INTEGER_SIZE_DB' with value '8'
+IOSS: Adding property 'INTEGER_SIZE_API' with value '8'
+slurmstepd: error: *** STEP 15281843.0 ON nid01565 CANCELLED AT 2018-09-28T01:01:08 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 15281843 ON nid01565 CANCELLED AT 2018-09-28T01:01:08 DUE TO TIME LIMIT ***
+srun: got SIGCONT
+srun: forcing job termination
