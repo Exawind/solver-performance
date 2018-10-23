@@ -23,9 +23,9 @@ linear_solvers:
     kspace: 100
     output_level: 0
     #muelu_xml_file_name: v27.xml
-    #muelu_xml_file_name: muelu-sgs.xml
-    #muelu_xml_file_name: muelu-l1gs2-drop0.03-unsmoo-noqr-rebaltarg10k-explR-rebalPR-aggsize-quiet.xml
-    muelu_xml_file_name: muelu-l1gs2-prepost.xml
+    muelu_xml_file_name: muelu-sgs.xml
+    #muelu_xml_file_name: muelu-l1gs2-drop0.02-unsmoo-noqr-rebaltarg10k-explR-rebalPR-aggsize-quiet.xml
+    #muelu_xml_file_name: muelu-l1gs2-prepost.xml
 
 realms:
 
