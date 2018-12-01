@@ -1,5 +1,9 @@
+# NREL 5MW G1 Nalu input deck
+# Notes:
+#   You must adjust "termination_step_count:".
+
 Simulations:
-  - name: nrel_5mw_gCoarse
+  - name: nrel_5mw_g1.rst0
     time_integrator: ti_1
     optimizer: opt1
 
@@ -8,38 +12,38 @@ linear_solvers:
   - name: solve_scalar
     type: tpetra
     method: gmres
-    preconditioner: riluk
+    preconditioner: sgs
     tolerance: 1e-5
-    max_iterations: 50
-    kspace: 50
+    max_iterations: 300
+    kspace: 100
     output_level: 0
 
   - name: solve_cont
     type: tpetra
     method: gmres
     preconditioner: muelu
-    tolerance: 1e-3
-    final_tolerance: 1e-5
-    max_iterations: 50
-    kspace: 50
-    output_level: 0
-    #muelu_xml_file_name: v27.xml
-    muelu_xml_file_name: muelu-l1gs2-drop0.03-unsmoo-noqr-rebaltarg10k-explR-rebalPR-aggsize.xml
+    tolerance: 1e-5
+    max_iterations: 300
+    kspace: 100
+
+    output_level: 1
+    recompute_preconditioner: yes
+    summarize_muelu_timer: yes
+    muelu_xml_file_name: muelu-cheby2er12-drop0.02-smoo-rebaltarg10k-explR-rebalPR-aggsize.xml
 
 realms:
 
   - name: realm_1
-    mesh: nrel_5mw_gCoarse_gjoin.exo
-    automatic_decomposition_type: rcb
-    check_jacobians: yes
+    mesh: restart/nrel_5mw_g1.rst0
     use_edges: no
     activate_aura: no
+    #automatic_decomposition_type: rcb
     check_for_missing_bcs: yes
-    activate_memory_diagnostic: yes
+    check_jacobians: no
 
     time_step_control:
      target_courant: 10.0
-     time_step_change_factor: 1.15
+     time_step_change_factor: 1.05
 
     equation_systems:
       name: theEqSys
@@ -58,13 +62,13 @@ realms:
 
     initial_conditions:
       - constant: ic_1
-        target_name: [block_101, block_201, block_104, block_204, block_105, block_205, block_106, block_206]
+        target_name: [block_101, block_201, block_104, block_204, block_105, block_205, block_106, block_106.Tetrahedron_4._urpconv, block_206, block_206.Tetrahedron_4._urpconv]
         value:
           pressure: 0
           velocity: [8.0,0.0,0.0]
 
     material_properties:
-      target_name: [block_101, block_201, block_104, block_204, block_105, block_205, block_106, block_206]
+      target_name: [block_101, block_201, block_104, block_204, block_105, block_205, block_106, block_106.Tetrahedron_4._urpconv, block_206, block_206.Tetrahedron_4._urpconv]
       specifications:
         - name: density
           type: constant
@@ -155,48 +159,48 @@ realms:
       current_target_name: [surface_18]
       opposing_target_name: [surface_16]
       non_conformal_user_data:
-        expand_box_percentage: 5.0
-        search_tolerance: 0.01
+        expand_box_percentage: 15.0
+        search_tolerance: 0.05
         search_method: stk_kdtree
 
     - non_conformal_boundary_condition: back_stat
       current_target_name: [surface_16]
       opposing_target_name: [surface_18]
       non_conformal_user_data:
-        expand_box_percentage: 5.0
-        search_tolerance: 0.01
+        expand_box_percentage: 15.0
+        search_tolerance: 0.05
         search_method: stk_kdtree
 
     - non_conformal_boundary_condition: front_rot
       current_target_name: [surface_14]
       opposing_target_name: [surface_17]
       non_conformal_user_data:
-        expand_box_percentage: 5.0
-        search_tolerance: 0.01
+        expand_box_percentage: 15.0
+        search_tolerance: 0.05
         search_method: stk_kdtree
 
     - non_conformal_boundary_condition: front_stat
       current_target_name: [surface_17]
       opposing_target_name: [surface_14]
       non_conformal_user_data:
-        expand_box_percentage: 5.0
-        search_tolerance: 0.01
+        expand_box_percentage: 15.0
+        search_tolerance: 0.05
         search_method: stk_kdtree
 
     - non_conformal_boundary_condition: out_rot
       current_target_name: [surface_12]
       opposing_target_name: [surface_13]
       non_conformal_user_data:
-        expand_box_percentage: 5.0
-        search_tolerance: 0.01
+        expand_box_percentage: 15.0
+        search_tolerance: 0.05
         search_method: stk_kdtree
 
     - non_conformal_boundary_condition: out_stat
       current_target_name: [surface_13]
       opposing_target_name: [surface_12]
       non_conformal_user_data:
-        expand_box_percentage: 5.0
-        search_tolerance: 0.01
+        expand_box_percentage: 15.0
+        search_tolerance: 0.05
         search_method: stk_kdtree
 
     solution_options:
@@ -208,7 +212,7 @@ realms:
       mesh_motion:
 
         - name: mesh_motion_rotor
-          target_name: [block_101, block_104, block_105, block_106]
+          target_name: [block_101, block_104, block_105, block_106, block_106.Tetrahedron_4._urpconv]
           #omega: 0.8888888888888888 #TSR=7 @ 8.0 m/s inflow velocity
           omega: 0.9587301587301587 #TSR=7.55 @ 8.0 m/s inflow velocity
           #centroid: [-14.673948 0.0 1.2838041]
@@ -216,7 +220,7 @@ realms:
           compute_centroid: yes
 
         - name: mesh_motion_outer_domain
-          target_name: [block_201, block_204, block_205, block_206]
+          target_name: [block_201, block_204, block_205, block_206, block_206.Tetrahedron_4._urpconv]
           omega: 0.0
 
       options:
@@ -241,51 +245,51 @@ realms:
             velocity: no
             pressure: yes
 
-    turbulence_averaging:
-      time_filter_interval: 100000.0
+#    turbulence_averaging:
+#      time_filter_interval: 100000.0
 
       specifications:
 
         - name: one
-          target_name: [block_101, block_201, block_104, block_204, block_105, block_205, block_106, block_206]
+          target_name: [block_101, block_201, block_104, block_204, block_105, block_205, block_106, block_106.Tetrahedron_4._urpconv, block_206, block_206.Tetrahedron_4._urpconv]
           reynolds_averaged_variables:
             - velocity
-          compute_q_criterion: yes
-          compute_vorticity: yes
+          compute_q_criterion: no
+          compute_vorticity: no
 
     post_processing:
 
     - type: surface
       physics: surface_force_and_moment
-      output_file_name: output/nrel_5mw_gCoarse.rst0.dat
-      frequency: 25
+      output_file_name: output/nrel_5mw_g1.dat
+      frequency: 1000
       parameters: [0, 0, 0]
       target_name: [surface_6, surface_7, surface_8, surface_9]
 
     output:
-      output_data_base_name: output/nrel_5mw_gCoarse.rst0.e
-      output_frequency: 25
+      output_data_base_name: output/nrel_5mw_g1.e
+      output_frequency: 1000
+      output_start: 1000
       output_node_set: no
       output_variables:
        - velocity
        - pressure
        - turbulent_viscosity
-       - vorticity
-       - q_criterion
        - mesh_displacement
 
     restart:
-      restart_data_base_name: restart/nrel_5mw_gCoarse.rst0
-      restart_frequency: 500
-      restart_start: 500
-      restart_forced_wall_time: 18000
-#      restart_time: 1000000.0
+      restart_data_base_name: restart/foo.rst
+      #restart_frequency: 50
+      restart_start: 99999
+      #restart_forced_wall_time: 19000
+      #restart_time: 1000000.0
+      restart_time: 3.47192518080328e-07
 
 Time_Integrators:
   - StandardTimeIntegrator:
       name: ti_1
       start_time: 0
-      termination_step_count: 500000
+      termination_step_count: NUMBER_OF_TIME_STEPS
       time_step: 1.0e-8
       time_stepping_type: adaptive
       time_step_count: 0
