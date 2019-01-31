@@ -1,7 +1,11 @@
-# NREL 5MW G1 Nalu input deck
+# -*- mode: yaml -*-
+#
+# NREL 5MW G1 Nalu-Wind input deck
+#
+# Solver stack: hypre
+#
 # Notes:
 #   You must adjust "termination_step_count:".
-#   Select between Trilinos and Hypre under "solver_system_specification".  (Default is Trilinos.)
 
 Simulations:
   - name: nrel_5mw_g1.rst0
@@ -9,15 +13,6 @@ Simulations:
     optimizer: opt1
 
 linear_solvers:
-
-  - name: solve_scalar_trilinos
-    type: tpetra
-    method: gmres
-    preconditioner: sgs
-    tolerance: 1e-5
-    max_iterations: 300
-    kspace: 100
-    output_level: 0
 
   - name: solve_scalar_hypre
     type: hypre
@@ -98,7 +93,6 @@ realms:
 
       solver_system_specification:
         pressure: solve_cont
-        #velocity: solve_scalar_trilinos
         velocity: solve_scalar_hypre
         dpdx: solve_scalar_hypre
 
@@ -251,25 +245,39 @@ realms:
         search_tolerance: 0.05
         search_method: stk_kdtree
 
+    mesh_motion:
+
+      - name: mesh_motion_rotor
+        mesh_parts:
+          - block_101
+          - block_104
+          - block_105
+          - block_106
+          - block_106.Tetrahedron_4._urpconv
+        frame: non_inertial
+        compute_centroid: yes
+        motion:
+          - type: rotation
+            omega: 0.9587301587301587 #TSR=7.55 @ 8.0 m/s inflow velocity
+            axis: [0.9961946980917455, 0.0, -0.08715574274765817]
+
+      - name: mesh_motion_outer_domain
+        mesh_parts:
+          - block_201
+          - block_204
+          - block_205
+          - block_206
+          - block_206.Tetrahedron_4._urpconv
+        frame: non_inertial
+        motion:
+          - type: rotation
+            omega: 0.0
+
     solution_options:
 
       name: myOptions
       turbulence_model: wale
       use_consolidated_solver_algorithm: yes
-
-      mesh_motion:
-
-        - name: mesh_motion_rotor
-          target_name: [block_101, block_104, block_105, block_106, block_106.Tetrahedron_4._urpconv]
-          #omega: 0.8888888888888888 #TSR=7 @ 8.0 m/s inflow velocity
-          omega: 0.9587301587301587 #TSR=7.55 @ 8.0 m/s inflow velocity
-          #centroid: [-14.673948 0.0 1.2838041]
-          unit_vector: [0.9961946980917455, 0.0, -0.08715574274765817]
-          compute_centroid: yes
-
-        - name: mesh_motion_outer_domain
-          target_name: [block_201, block_204, block_205, block_206, block_206.Tetrahedron_4._urpconv]
-          omega: 0.0
 
       options:
 
@@ -292,18 +300,6 @@ realms:
         - shifted_gradient_operator:
             velocity: no
             pressure: yes
-
-#    turbulence_averaging:
-#      time_filter_interval: 100000.0
-
-      specifications:
-
-        - name: one
-          target_name: [block_101, block_201, block_104, block_204, block_105, block_205, block_106, block_106.Tetrahedron_4._urpconv, block_206, block_206.Tetrahedron_4._urpconv]
-          reynolds_averaged_variables:
-            - velocity
-          compute_q_criterion: no
-          compute_vorticity: no
 
     post_processing:
 
