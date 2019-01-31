@@ -275,6 +275,7 @@ realms:
           - block_204
           - block_205
           - block_206
+        frame: non_inertial
         motion:
           - type: rotation
             omega: 0.0

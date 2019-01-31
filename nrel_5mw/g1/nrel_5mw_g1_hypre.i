@@ -268,6 +268,7 @@ realms:
           - block_205
           - block_206
           - block_206.Tetrahedron_4._urpconv
+        frame: non_inertial
         motion:
           - type: rotation
             omega: 0.0
