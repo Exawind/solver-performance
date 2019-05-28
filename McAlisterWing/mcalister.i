@@ -51,15 +51,13 @@ linear_solvers:
     output_level: 0
     write_matrix_files: no
     muelu_xml_file_name: ilu.xml
-    #muelu_xml_file_name: iluk.xml
-    #muelu_xml_file_name: ilut.xml
-    #muelu_xml_file_name: sgs.xml
 
 realms:
 
   - name: realm_1
-    mesh: McAlisterOversetTipVortexExpandingWake_12.exo
-    automatic_decomposition_type: rcb
+    mesh: mesh/McAlisterOversetTipVortexExpandingWake_12.exo
+    #uncomment to enable runtime decomposition
+    #automatic_decomposition_type: rcb
     use_edges: yes
 
     time_step_control:
@@ -195,7 +193,8 @@ realms:
             specific_dissipation_rate: 1.0
 
         - alpha_upw:
-            velocity: 0.0
+            # to disable upwinding, set velocity to 0
+            velocity: 1.0
             turbulent_ke: 1.0
             specific_dissipation_rate: 1.0
 
@@ -265,11 +264,8 @@ Time_Integrators:
   - StandardTimeIntegrator:
       name: ti_1
       start_time: 0
-      #time_step: 0.0004
-      #time_step: 0.002
       time_step: 0.0005
-      #time_step: 0.004
-      termination_step_count: 1000
+      termination_step_count: 100
       time_stepping_type: fixed
       time_step_count: 0
       second_order_accuracy: yes
