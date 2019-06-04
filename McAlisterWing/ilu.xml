@@ -10,6 +10,7 @@
     <Parameter name="schwarz: combine mode"             type="string" value="ZERO"/>
     <Parameter name="subdomain solver name"             type="string" value="AMESOS2"/>
     <ParameterList name="subdomain solver parameters">
+      <Parameter name="Amesos2 solver name"   type="string"   value="superlu"/>
       <ParameterList name="Amesos2">
         <ParameterList name="SuperLU">
           <Parameter     name="ILU_Flag"                  type="bool"    value="true" />
