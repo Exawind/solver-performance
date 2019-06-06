@@ -14,14 +14,9 @@
         <ParameterList name="SuperLU">
           <Parameter     name="ILU_Flag"                  type="bool"    value="true" />
           <Parameter     name="Equil"                     type="bool"    value="true" />
-          <Parameter     name="SymmetricMode"             type="bool"    value="true" />
-          <Parameter     name="DiagPivotThresh"           type="double"  value="0.0"/>
-          <Parameter     name="ILU_FillFactor"            type="double"  value="20"/>
-          <Parameter     name="ILU_DropTol"               type="double"  value="0.0001"/>
-          <Parameter     name="ILU_MILU"                  type="string"  value="SMILU_2"/> 
-          <!-- <Parameter     name="ColPerm"                   type="string"  value="MMD_ATA"/> -->
-          <Parameter     name="ColPerm"                   type="string"  value="MMD_AT_PLUS_A"/>
-          <Parameter     name="ILU_FillTol"               type="double"  value="0.0001"/>
+          <Parameter     name="ILU_FillFactor"            type="double"  value="750"/>
+          <Parameter     name="ILU_DropTol"               type="double"  value="0.01"/>
+          <Parameter     name="ILU_FillTol"               type="double"  value="1.0"/>
         </ParameterList>
       </ParameterList>
     </ParameterList>
