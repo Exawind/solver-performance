@@ -1,7 +1,4 @@
 5514e24ba3fe20cb4a77695e6252724a  nrel_5mw_g0.exo
-e0f66944e6bde4bec6f2e2d5dd780dc4  nrel_5mw_g0_no_rotation.exo
-f1669b68f328506234ebc896124d765e  nrel_5mw_g0_rot.exo
-05cea9f401bca6533a5ff41a5650a956  nrel_5mw_g0_stat.exo
 
 11af89e7040ad1a38f98a100eb65bfb0  nrel_5mw_g1.exo
 
