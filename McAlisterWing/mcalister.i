@@ -210,7 +210,7 @@ realms:
 
       - type: surface
         physics: surface_force_and_moment
-        output_file_name: forces.dat
+        output_file_name: output/forces.dat
         frequency: 1
         parameters: [0,0,0]
         target_name: wing
@@ -218,11 +218,12 @@ realms:
     restart:
       restart_data_base_name: rst/mcalister.rst
       restart_frequency: 50
-      restart_start: 5
+      restart_start: 1000
 
     output:
-      output_data_base_name: out/mcalister.e
+      output_data_base_name: output/mcalister.e
       output_frequency: 50
+      output_start: 1000
       output_node_set: no
       output_variables:
        - velocity
@@ -245,7 +246,7 @@ Time_Integrators:
       name: ti_1
       start_time: 0
       time_step: 0.001
-      termination_step_count: 10000
+      termination_step_count: NUMBER_OF_TIME_STEPS
       time_stepping_type: fixed
       time_step_count: 0
       second_order_accuracy: yes
