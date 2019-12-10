@@ -55,23 +55,18 @@ linear_solvers:
 realms:
 
   - name: realm_1
-    mesh: mesh/McAlisterOversetTipVortexExpandingWake_12.exo
-    #uncomment to enable runtime decomposition
-    #automatic_decomposition_type: rcb
+    mesh: ./meshes/freestream-wing1-tipvortex1-mirror-aoa12.exo
+    automatic_decomposition_type: rcb
     use_edges: yes
-
-    time_step_control:
-     target_courant: 1000.0
-     time_step_change_factor: 1.05
 
     equation_systems:
       name: theEqSys
       max_iterations: 4
 
       solver_system_specification:
-        velocity: solve_momentum
-        turbulent_ke: solve_momentum # solve_scalar
-        specific_dissipation_rate: solve_momentum # solve_scalar
+        velocity: solve_scalar
+        turbulent_ke: solve_scalar
+        specific_dissipation_rate: solve_scalar
         pressure: solve_cont
         ndtw: solve_cont
 
@@ -84,7 +79,6 @@ realms:
         - LowMachEOM:
             name: myLowMach
             max_iterations: 1
-            decoupled_pressure_solve: yes
             num_pressure_correctors: 3
             convergence_tolerance: 1e-8
 
@@ -96,23 +90,21 @@ realms:
     initial_conditions:
       - constant: ic_1
         target_name:
-          - base-HEX
-          - base-WEDGE
-          - base-PYRAMID
-          - base-TETRA
+          - background-HEX
+          - wing-HEX
+          - wing-WEDGE
           - tipvortex-HEX
         value:
           pressure: 0
-          velocity: [44.99478963,  9.56393778, 0.0]
+          velocity: [46.0, 0.0, 0.0]
           turbulent_ke: 0.69
           specific_dissipation_rate: 230.0
 
     material_properties:
       target_name:
-        - base-HEX
-        - base-WEDGE
-        - base-PYRAMID
-        - base-TETRA
+        - background-HEX
+        - wing-HEX
+        - wing-WEDGE
         - tipvortex-HEX
       specifications:
         - name: density
@@ -123,29 +115,6 @@ realms:
           value: 0.00003756
 
     boundary_conditions:
-
-    - symmetry_boundary_condition: bc_front
-      target_name: front
-      symmetry_user_data:
-
-    - symmetry_boundary_condition: bc_tunnel_wall
-      target_name: tunnel_wall
-      symmetry_user_data:
-
-    - wall_boundary_condition: bc_wall
-      target_name: wing
-      wall_user_data:
-        velocity: [0,0,0]
-        use_wall_function: no
-        turbulent_ke: 0.0
-
-    - open_boundary_condition: bc_top
-      target_name: top
-      open_user_data:
-        velocity: [0,0,0]
-        pressure: 0.0
-        turbulent_ke: 0.69
-        specific_dissipation_rate: 230.0
 
     - open_boundary_condition: bc_open
       target_name: outlet
@@ -158,29 +127,38 @@ realms:
     - inflow_boundary_condition: bc_inflow
       target_name: inlet
       inflow_user_data:
-        velocity: [44.99478963,  9.56393778, 0.0]
+        velocity: [46.0, 0.0, 0.0]
         turbulent_ke: 0.69
         specific_dissipation_rate: 230.0
 
-    - inflow_boundary_condition: bc_bottom
-      target_name: bottom
-      inflow_user_data:
-        velocity: [44.99478963,  9.56393778, 0.0]
-        turbulent_ke: 0.69
-        specific_dissipation_rate: 230.0
+    - wall_boundary_condition: bc_wing
+      target_name: wing
+      wall_user_data:
+        velocity: [0,0,0]
+        use_wall_function: no
+        turbulent_ke: 0.0
+
+    - symmetry_boundary_condition: bc_tunnel_wall
+      target_name: tunnel_wall
+      symmetry_user_data:
 
     - overset_boundary_condition: bc_overset
       overset_connectivity_type: tioga
       overset_user_data:
         tioga_populate_inactive_part: false
         mesh_group:
+          - overset_name: wing
+            mesh_parts: [ wing-HEX, wing-WEDGE ]
+            ovset_parts: [ outerbc_wingblock ]
+            wall_parts: [wing]
+
           - overset_name: tipvortex
             mesh_parts: [ tipvortex-HEX ]
             ovset_parts: [ outerbc_tipvortexblock ]
 
           - overset_name: background
-            mesh_parts: [ base-HEX, base-WEDGE, base-PYRAMID, base-TETRA ]
-      
+            mesh_parts: [ background-HEX ]
+
     solution_options:
       name: myOptions
       turbulence_model: sst
@@ -239,18 +217,18 @@ realms:
 
     restart:
       restart_data_base_name: rst/mcalister.rst
-      restart_frequency: 1001
-      restart_start: 1001
+      restart_frequency: 50
+      restart_start: 5
 
     output:
       output_data_base_name: out/mcalister.e
-      output_frequency: 1001
-      output_start: 1001
+      output_frequency: 50
       output_node_set: no
       output_variables:
        - velocity
        - pressure
        - pressure_force
+       - viscous_force
        - turbulent_ke
        - specific_dissipation_rate
        - minimum_distance_to_wall
@@ -259,13 +237,15 @@ realms:
        - element_courant
        - iblank
        - iblank_cell
+       - element_courant
+       - assembled_area_force_moment
 
 Time_Integrators:
   - StandardTimeIntegrator:
       name: ti_1
       start_time: 0
-      time_step: 0.0005
-      termination_step_count: 100
+      time_step: 0.001
+      termination_step_count: 10000
       time_stepping_type: fixed
       time_step_count: 0
       second_order_accuracy: yes
