@@ -14,61 +14,82 @@ linear_solvers:
     kspace: 200
     output_level: 0
 
-  - name: solve_cont
+  - name: solve_cont_hypre
     type: hypre
-    method: hypre_gmres
+    method: hypre_cogmres
     preconditioner: boomerAMG
     tolerance: 1e-5
-    max_iterations: 300
-    kspace: 75
-    output_level: 0
+    max_iterations: 100
+    kspace: 40
+    write_matrix_files: no
+    output_level: 1
+    bamg_output_level: 0
     bamg_coarsen_type: 8
     bamg_interp_type: 6
+    bamg_relax_type: 3
+    bamg_num_sweeps: 2
+    bamg_relax_order: 0
     bamg_cycle_type: 1
+    bamg_keep_transpose: 1
+    bamg_max_levels: 6
+    bamg_trunc_factor: 0.1
+    bamg_agg_num_levels: 2
+    bamg_agg_interp_type: 4
+    bamg_agg_pmax_elmts: 3
+    bamg_pmax_elmts: 3
+    bamg_strong_threshold: 0.25
+    bamg_non_galerkin_tol: 0.05
+    bamg_non_galerkin_level_tols:
+       levels: [0, 1, 2]
+       tolerances: [0.0, 0.01, 0.03 ]
 
-  - name: solve_mom
+  - name: solve_mom_hypre
     type: hypre
-    method: hypre_gmres
+    method: hypre_cogmres
     preconditioner: boomerAMG
     tolerance: 1e-5
-    max_iterations: 200
-    kspace: 75
-    output_level: 0
+    max_iterations: 100
+    kspace: 40
+    output_level: 1
     segregated_solver: yes
     bamg_max_levels: 1
-    bamg_relax_type: 6
-    bamg_num_sweeps: 1
+    bamg_relax_type: 3
+    bamg_num_sweeps: 5
+    bamg_relax_order: 0
+    write_matrix_files: no
 
-  - name: solve_momentum
+  - name: solve_mom_trilinos
     type: tpetra
     method: gmres
-    preconditioner: muelu
-    #preconditioner: ilut
+    preconditioner: ilut
     #preconditioner: sgs
     tolerance: 1e-5
     max_iterations: 1000
     kspace: 500
     output_level: 0
     write_matrix_files: no
-    muelu_xml_file_name: ilu.xml
 
 realms:
 
   - name: realm_1
-    mesh: ./meshes/freestream-wing1-tipvortex1-mirror-aoa12.exo
+    mesh: McAlisterOversetTipVortexExpandingWake_12.exo
     automatic_decomposition_type: rcb
     use_edges: yes
+
+    time_step_control:
+     target_courant: 1000.0
+     time_step_change_factor: 1.05
 
     equation_systems:
       name: theEqSys
       max_iterations: 4
 
       solver_system_specification:
-        velocity: solve_scalar
-        turbulent_ke: solve_scalar
-        specific_dissipation_rate: solve_scalar
-        pressure: solve_cont
-        ndtw: solve_cont
+        velocity: solve_mom_hypre
+        turbulent_ke: solve_mom_hypre
+        specific_dissipation_rate: solve_mom_hypre
+        pressure: solve_cont_hypre
+        ndtw: solve_cont_hypre
 
       systems:
         - WallDistance:
@@ -79,6 +100,7 @@ realms:
         - LowMachEOM:
             name: myLowMach
             max_iterations: 1
+            decoupled_pressure_solve: yes
             num_pressure_correctors: 3
             convergence_tolerance: 1e-8
 
@@ -90,21 +112,23 @@ realms:
     initial_conditions:
       - constant: ic_1
         target_name:
-          - background-HEX
-          - wing-HEX
-          - wing-WEDGE
+          - base-HEX
+          - base-WEDGE
+          - base-PYRAMID
+          - base-TETRA
           - tipvortex-HEX
         value:
           pressure: 0
-          velocity: [46.0, 0.0, 0.0]
+          velocity: [44.99478963,  9.56393778, 0.0]
           turbulent_ke: 0.69
           specific_dissipation_rate: 230.0
 
     material_properties:
       target_name:
-        - background-HEX
-        - wing-HEX
-        - wing-WEDGE
+        - base-HEX
+        - base-WEDGE
+        - base-PYRAMID
+        - base-TETRA
         - tipvortex-HEX
       specifications:
         - name: density
@@ -115,6 +139,29 @@ realms:
           value: 0.00003756
 
     boundary_conditions:
+
+    - symmetry_boundary_condition: bc_front
+      target_name: front
+      symmetry_user_data:
+
+    - symmetry_boundary_condition: bc_tunnel_wall
+      target_name: tunnel_wall
+      symmetry_user_data:
+
+    - wall_boundary_condition: bc_wall
+      target_name: wing
+      wall_user_data:
+        velocity: [0,0,0]
+        use_wall_function: no
+        turbulent_ke: 0.0
+
+    - open_boundary_condition: bc_top
+      target_name: top
+      open_user_data:
+        velocity: [0,0,0]
+        pressure: 0.0
+        turbulent_ke: 0.69
+        specific_dissipation_rate: 230.0
 
     - open_boundary_condition: bc_open
       target_name: outlet
@@ -127,38 +174,29 @@ realms:
     - inflow_boundary_condition: bc_inflow
       target_name: inlet
       inflow_user_data:
-        velocity: [46.0, 0.0, 0.0]
+        velocity: [44.99478963,  9.56393778, 0.0]
         turbulent_ke: 0.69
         specific_dissipation_rate: 230.0
 
-    - wall_boundary_condition: bc_wing
-      target_name: wing
-      wall_user_data:
-        velocity: [0,0,0]
-        use_wall_function: no
-        turbulent_ke: 0.0
-
-    - symmetry_boundary_condition: bc_tunnel_wall
-      target_name: tunnel_wall
-      symmetry_user_data:
+    - inflow_boundary_condition: bc_bottom
+      target_name: bottom
+      inflow_user_data:
+        velocity: [44.99478963,  9.56393778, 0.0]
+        turbulent_ke: 0.69
+        specific_dissipation_rate: 230.0
 
     - overset_boundary_condition: bc_overset
       overset_connectivity_type: tioga
       overset_user_data:
         tioga_populate_inactive_part: false
         mesh_group:
-          - overset_name: wing
-            mesh_parts: [ wing-HEX, wing-WEDGE ]
-            ovset_parts: [ outerbc_wingblock ]
-            wall_parts: [wing]
-
           - overset_name: tipvortex
             mesh_parts: [ tipvortex-HEX ]
             ovset_parts: [ outerbc_tipvortexblock ]
 
           - overset_name: background
-            mesh_parts: [ background-HEX ]
-
+            mesh_parts: [ base-HEX, base-WEDGE, base-PYRAMID, base-TETRA ]
+      
     solution_options:
       name: myOptions
       turbulence_model: sst
@@ -171,7 +209,6 @@ realms:
             specific_dissipation_rate: 1.0
 
         - alpha_upw:
-            # to disable upwinding, set velocity to 0
             velocity: 1.0
             turbulent_ke: 1.0
             specific_dissipation_rate: 1.0
@@ -210,26 +247,25 @@ realms:
 
       - type: surface
         physics: surface_force_and_moment
-        output_file_name: output/forces.dat
+        output_file_name: forces.dat
         frequency: 1
         parameters: [0,0,0]
         target_name: wing
 
     restart:
       restart_data_base_name: rst/mcalister.rst
-      restart_frequency: 50
-      restart_start: 1000
+      restart_frequency: 1001
+      restart_start: 1001
 
     output:
-      output_data_base_name: output/mcalister.e
-      output_frequency: 50
-      output_start: 1000
+      output_data_base_name: out/mcalister.e
+      output_frequency: 1001
+      output_start: 1001
       output_node_set: no
       output_variables:
        - velocity
        - pressure
        - pressure_force
-       - viscous_force
        - turbulent_ke
        - specific_dissipation_rate
        - minimum_distance_to_wall
@@ -238,15 +274,13 @@ realms:
        - element_courant
        - iblank
        - iblank_cell
-       - element_courant
-       - assembled_area_force_moment
 
 Time_Integrators:
   - StandardTimeIntegrator:
       name: ti_1
       start_time: 0
-      time_step: 0.001
-      termination_step_count: NUMBER_OF_TIME_STEPS
+      time_step: 0.002
+      termination_step_count: 10
       time_stepping_type: fixed
       time_step_count: 0
       second_order_accuracy: yes
