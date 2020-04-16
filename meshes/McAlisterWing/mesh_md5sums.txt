@@ -1,2 +1,3 @@
 4283a0d3df9a54939b3dcd30e64012bc  freestream-wing1-tipvortex1-mirror-aoa12.exo
 960926edd98849a42ea45b04aa22a8cb  freestream-wing2-tipvortex2-mirror-aoa12.exo
+fa2b71c8265d1a0cc0b1429c9353a568  McAlisterOversetTipVortexExpandingWake_12.exo
