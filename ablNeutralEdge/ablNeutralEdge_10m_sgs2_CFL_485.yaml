@@ -11,7 +11,7 @@ linear_solvers:
   - name: solve_scalar
     type: tpetra
     method: gmres
-    preconditioner: mt_sgs
+    preconditioner: sgs2
     tolerance: 1e-6
     max_iterations: 75
     kspace: 75
@@ -34,13 +34,12 @@ linear_solvers:
 realms:
 
   # The fluid realm that uses the 5 km x 5 km x 1 km atmospheric LES mesh.
-  # At a 5m resolution the mesh contains 200M cells
   - name: fluidRealm
-    mesh: /gpfs/alpine/cfd116/proj-shared/meshes/ablNeutralEdge/05m/abl_5km_5km_1km_neutral_05m.g
+    mesh: /gpfs/alpine/cfd116/proj-shared/meshes/ablNeutralEdge/10m/abl_5km_5km_1km_neutral_10m.g
     use_edges: yes
     automatic_decomposition_type: rcb
 
-    # This defines the equations to be solved: momentum, pressure, static enthalpy,
+    # This defines the equations to be solved: momentum, pressure, static enthalpy, 
     # and subgrid-scale turbulent kinetic energy.  The equation system will be iterated
     # a maximum of 4 outer iterations.
     equation_systems:
@@ -139,7 +138,7 @@ realms:
     - periodic_boundary_condition: bc_east_west
       target_name: [east, west]
       periodic_user_data:
-        search_tolerance: 0.0001
+        search_tolerance: 0.0001 
 
     - abltop_boundary_condition: bc_upper
       target_name: upper
@@ -197,7 +196,7 @@ realms:
         # the planar-averaged wind at a certain height to a certain
         # speed.
         - source_terms:
-            momentum:
+            momentum: 
               - buoyancy_boussinesq
               - EarthCoriolis
               - abl_forcing
@@ -208,7 +207,7 @@ realms:
             reference_density: 1.178037722969475
             reference_temperature: 300.0
             gravity: [0.0,0.0,-9.81]
-            thermal_expansion_coefficient: 3.33333333e-3
+            thermal_expansion_coefficient: 3.33333333e-3           
             east_vector: [1.0, 0.0, 0.0]
             north_vector: [0.0, 1.0, 0.0]
             latitude: 45.0
@@ -217,7 +216,7 @@ realms:
         - limiter:
             pressure: no
             velocity: no
-            enthalpy: yes
+            enthalpy: yes 
 
         - peclet_function_form:
             velocity: classic
@@ -291,7 +290,7 @@ Time_Integrators:
       name: ti_1
       start_time: 0.0
       termination_step_count: 10
-      time_step: 0.1
+      time_step: 0.6
       time_stepping_type: fixed
       time_step_count: 0
       second_order_accuracy: yes
