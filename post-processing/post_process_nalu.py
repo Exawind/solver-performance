@@ -19,7 +19,7 @@ def parse_nalu_log(filename, equations, metric):
     times       = np.zeros((len(equations), 8))
     for lineIdx in range(len(data)):
         line = data[lineIdx]
-	if("STKPERF: Total Time:" in line):
+        if("STKPERF: Total Time:" in line):
             wallclock = float(line.split("STKPERF: Total Time:")[1])
         if "Simulation Shall Commence: number of processors =" in line:
             numRanks = int(line.split("=")[1])
