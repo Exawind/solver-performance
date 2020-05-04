@@ -15,6 +15,9 @@ filenames_gpu = ["ablNeutralEdge_rcb_" + "{:0>2}".format(res) + "m_CAM_sgs2_CFL_
 table_data = ppn.generate_scaling_data(dirname_gpu, filenames_gpu, equations, "max")
 # print(table_data)
 
+print("\\begin{tabular}{|lc|ccccc|ccccc|c|} \\hline")
+print("      &     &   \\multicolumn{5}{c|}{Continuity} & \\multicolumn{5}{c|}{Momentum} & \\\\")
+print("GPUs  & $\\Delta x$   &   init & assm  & load & solve & iters & init & assm   & load & solve & iters &  Total Time \\\\ \\hline")
 for idx, filename in enumerate(filenames_gpu):
     line = ""
     line = line + "{: >5}".format(int(table_data["num ranks"][idx])) + " & " + "{: >2}".format(meshRes[idx]) + "m &"
@@ -27,8 +30,10 @@ for idx, filename in enumerate(filenames_gpu):
     line = line + " \\\\"
     print(line)
 
-print("")
+print("\\hline\\hline")
 
+print("      &     &   \\multicolumn{5}{c|}{Turbulent Kinetic Energy} & \\multicolumn{5}{c|}{Enthalpy} & \\\\")
+print("GPUs  & $\\Delta x$   &   init & assm  & load & solve & iters & init & assm   & load & solve & iters &  Total Time \\\\ \\hline")
 for idx, filename in enumerate(filenames_gpu):
     line = ""
     line = line + "{: >5}".format(int(table_data["num ranks"][idx])) + " & " + "{: >2}".format(meshRes[idx]) + "m &"
@@ -40,4 +45,6 @@ for idx, filename in enumerate(filenames_gpu):
         line = line + "{: >5}".format(table_data[equation]["linear iterations"][idx]) + " &"
     line = line + "{: >5.2f} \\\\".format(table_data["wall clock"][idx])
     print(line)
+print("\\hline")
+print("\\end{tabular}")
 
