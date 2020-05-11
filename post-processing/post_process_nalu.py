@@ -19,16 +19,21 @@ def parse_nalu_log(filename, equations, metric):
     times       = np.zeros((len(equations), 8))
     for lineIdx in range(len(data)):
         line = data[lineIdx]
+        if("Node count from meta data =" in line):
+            numNodes = float(line.split("=")[1])
         if("STKPERF: Total Time:" in line):
             wallclock = float(line.split("STKPERF: Total Time:")[1])
         if "Simulation Shall Commence: number of processors =" in line:
             numRanks = int(line.split("=")[1])
+        if "Simulation Shall Complete: time/timestep:" in line:
+            totalSimTime = int(line.split(":")[2].split("/")[0])
+            numTimeSteps = int(line.split(":")[2].split("/")[1])
         if line.split():
             for eqIdx, equation in enumerate(equations):
-                if(line.split()[0] == equation):
+                if(line.split()[0] == equation[1]):
                     numLinIters[eqIdx] += int(line.split()[1])
 
-                if("Timing for Eq: "+equation in line):
+                if("Timing for Eq: "+equation[0] in line):
                     init     = data[lineIdx + 1]
                     assemble = data[lineIdx + 2]
                     load     = data[lineIdx + 3]
@@ -58,18 +63,21 @@ def parse_nalu_log(filename, equations, metric):
         eqDict["misc"]                    = times[eqIdx, 5]
         eqDict["total"]                   = times[eqIdx, 6]
 
-        simData[equation] = eqDict
+        simData[equation[1]] = eqDict
     
-    simData["wall clock"] = wallclock
-    simData["num ranks"]  = numRanks
+    simData["wall clock"]     = wallclock
+    simData["num ranks"]      = numRanks
+    simData["num time steps"] = numTimeSteps
+    simData["total sim time"] = totalSimTime
+    simData["node count"]     = numNodes
 
     return simData
 
 def generate_scaling_data(dirname, filenames, equations, metric):
     output = dict()
     scaling_data = dict()
-    equation_fields = ["initialization", "assembly", "load complete", "solve", "preconditioner setup", "misc", "linear iterations"]
-    global_fields   = ["wall clock", "num ranks"]
+    equation_fields = ["initialization", "assembly", "load complete", "solve", "preconditioner setup", "misc", "linear iterations", "total linear iterations"]
+    global_fields   = ["node count", "wall clock", "num ranks", "num time steps", "total sim time"]
 
     if(metric not in ["avg", "min", "max"]):
         print("metrix must be \"avg\", \"min\" or \"max\"")
@@ -82,12 +90,12 @@ def generate_scaling_data(dirname, filenames, equations, metric):
     # Step 2: Reformatting of data for easy post-processing into
     # plots or tables.
     for equation in equations:
-        output[equation] = dict()
+        output[equation[1]] = dict()
         for field in equation_fields:
-            output[equation][field] = np.zeros(len(filenames))
+            output[equation[1]][field] = np.zeros(len(filenames))
             for idx, filename in enumerate(filenames):
-                output[equation][field][idx] =  scaling_data[os.path.basename(filename)][equation][field]
-        output[equation]
+                output[equation[1]][field][idx] =  scaling_data[os.path.basename(filename)][equation[1]][field]
+        output[equation[1]]
 
     for field in global_fields:
         output[field] = np.zeros(len(filenames))
