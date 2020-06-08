@@ -26,7 +26,7 @@
 
   <Parameter        name="repartition: enable"               type="bool"     value="true"/>
   <Parameter        name="repartition: min rows per proc"    type="int"      value="100000"/>
-  <Parameter        name="repartition: target rows per proc" type="int"      value="400000"/>
+  <Parameter        name="repartition: target rows per proc" type="int"      value="100000"/>
   <Parameter        name="repartition: start level"          type="int"      value="1"/>
   <Parameter        name="repartition: max imbalance"        type="double"   value="1.327"/>
   <Parameter        name="repartition: partitioner"          type="string"   value="zoltan2"/>
