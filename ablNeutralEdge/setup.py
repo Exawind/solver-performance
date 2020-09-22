@@ -1,3 +1,11 @@
+"""
+Run this to generate the meshes
+You will need aprepro in the path when you execute
+
+'python setup.py' will generate the ablNeutralEdge cases
+add any additional commands and it will generate the actuator
+cases
+"""
 import sys
 import subprocess
 
