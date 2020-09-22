@@ -240,8 +240,9 @@ realms:
         # from the Exodus mesh/field file.
         #- input_variables_from_file:
         #    temperature: temperature
+        #
 {if(use_actuator)}
-# {include(actuator.yaml)}
+{include(actuator.yaml)}
 {endif}
 
     output:
