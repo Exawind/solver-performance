@@ -4,7 +4,7 @@ Run this to generate the input files
 You will need aprepro in the path when you execute
 
 'python setup.py' will generate the ablNeutralEdge cases
-'python setup.py /path/to/installed/nrewl5MWactuatorLine' will
+'python setup.py /absolute/path/to/installed/reg_test/for/nrewl5MWactuatorLine' will
 generate the actuatorLine cases
 """
 import sys
