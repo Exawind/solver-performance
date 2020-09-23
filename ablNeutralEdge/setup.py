@@ -25,6 +25,13 @@ if len(sys.argv) > 1:
     use_actuator = True
     base_name = "nrel5MWactuatorLine"
     nrel5mw_base_dir = sys.argv[1]
+
+    with open(os.path.join(nrel5mw_base_dir, '5MW_Baseline','NRELOffshrBsline5MW_Onshore_ServoDyn.dat'), 'r') as source:
+        fname = 'ServoDyn.dat'
+        with open(fname, 'w') as target:
+            data = source.read()
+            pcmode = data.replace(r"5   PCMode", r"0   PCMode")
+            target.write(pcmode)
 else:
     use_actuator = ""
     base_name = "ablNeutralEdge"
@@ -51,4 +58,6 @@ for case in cases:
                     data = source.read()
                     totaltime = data.replace(r"0.62500", str(case["ts"]*10))
                     timestep = totaltime.replace(r"0.00625", str(case["ts"]/4))
-                    target.write(timestep)
+                    print(nrel5mw_base_dir + r'/5MW_Baseline/NRELOffshrBsline5MW_Onshore_ServoDyn.dat')
+                    servofile = timestep.replace(os.path.join(nrel5mw_base_dir, r'5MW_Baseline','NRELOffshrBsline5MW_Onshore_ServoDyn.dat'),'ServoDyn.dat')
+                    target.write(servofile)
