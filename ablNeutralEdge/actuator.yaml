@@ -1,7 +1,7 @@
     actuator:
       type: ActLineFASTNGP
       search_method: stk_kdtree
-      search_target_part: hex8
+      search_target_part: fluid
 
       n_turbines_glob: 2
       debug:    False
