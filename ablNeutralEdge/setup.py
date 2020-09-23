@@ -52,10 +52,10 @@ for case in cases:
     # use python because OpenFAST files don't play nice with aprepro
     if use_actuator != "":
         with  open(os.path.join(nrel5mw_base_dir, 'nrel5mw.fst'), 'r') as source:
+            data = source.read()
             for i in range(1,3):
                 fname = "nrel5mw_{ind}_{ms}.fst".format(ms=case["ms"], ind=i)
                 with open(fname, 'w') as target:
-                    data = source.read()
                     totaltime = data.replace(r"0.62500", str(case["ts"]*10))
                     timestep = totaltime.replace(r"0.00625", str(case["ts"]/4))
                     print(nrel5mw_base_dir + r'/5MW_Baseline/NRELOffshrBsline5MW_Onshore_ServoDyn.dat')
