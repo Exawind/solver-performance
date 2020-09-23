@@ -1,12 +1,14 @@
+#!/usr/bin/env
 """
-Run this to generate the meshes
+Run this to generate the input files
 You will need aprepro in the path when you execute
 
 'python setup.py' will generate the ablNeutralEdge cases
-add any additional commands and it will generate the actuator
-cases
+'python setup.py /path/to/installed/nrewl5MWactuatorLine' will
+generate the actuatorLine cases
 """
 import sys
+import os
 import subprocess
 
 mesh_size = ["02", "05", "10", "20", "40"]
@@ -22,6 +24,7 @@ output_file = "{base}_{ms}m_sgs2_CFL_485.yaml"
 if len(sys.argv) > 1:
     use_actuator = True
     base_name = "nrel5MWactuatorLine"
+    nrel5mw_base_dir = sys.argv[1]
 else:
     use_actuator = ""
     base_name = "ablNeutralEdge"
@@ -34,18 +37,18 @@ for case in cases:
 
     print(command)
 
-    subprocess.run(command)
+    # python 2 support since we are slow to update
+    subprocess.check_call(command)
+    subprocess.call(command)
 
+    # create OpenFAST input files
+    # use python because OpenFAST files don't play nice with aprepro
     if use_actuator != "":
-        for i in range(1,3):
-            fname = "nrel5mw_{ind}_{ms}.fst".format(ms=case["ms"], ind=i)
-            copy = subprocess.run(["cp", "nrel5mw.fst.in", fname])
-
-            totaltime = ["sed", "-i",  's/totaltime/'+'{value}/g'.format(value=case["ts"]*10),fname]
-            tstep = ["sed", "-i", 's/timestep/'+'{value}/g'.format(value=case["ts"]/4),fname]
-
-            print(totaltime)
-            print(tstep)
-
-            subprocess.run(totaltime)
-            subprocess.run(tstep)
+        with  open(os.path.join(nrel5mw_base_dir, 'nrel5mw.fst'), 'r') as source:
+            for i in range(1,3):
+                fname = "nrel5mw_{ind}_{ms}.fst".format(ms=case["ms"], ind=i)
+                with open(fname, 'w') as target:
+                    data = source.read()
+                    totaltime = data.replace(r"0.62500", str(case["ts"]*10))
+                    timestep = totaltime.replace(r"0.00625", str(case["ts"]/4))
+                    target.write(timestep)
