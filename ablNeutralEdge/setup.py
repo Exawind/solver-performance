@@ -27,8 +27,25 @@ else:
     base_name = "ablNeutralEdge"
 
 for case in cases:
-    command = ["aprepro", "-c#", "mesh_size='{ms}'".format(ms=case["ms"]), "timestep={ts}".format(ts=case["ts"]),
-                    "use_actuator={ua}".format(ua=use_actuator), input_file,
-                    output_file.format(ms=case["ms"], base=base_name)]
+    command = ["aprepro", "-c#", "meshsize='{ms}'".format(ms=case["ms"]),
+               "timestep={ts}".format(ts=case["ts"]),
+                "use_actuator={ua}".format(ua=use_actuator), input_file,
+                output_file.format(ms=case["ms"], base=base_name)]
+
     print(command)
+
     subprocess.run(command)
+
+    if use_actuator != "":
+        for i in range(1,3):
+            fname = "nrel5mw_{ind}_{ms}.fst".format(ms=case["ms"], ind=i)
+            copy = subprocess.run(["cp", "nrel5mw.fst.in", fname])
+
+            totaltime = ["sed", "-i",  's/totaltime/'+'{value}/g'.format(value=case["ts"]*10),fname]
+            tstep = ["sed", "-i", 's/timestep/'+'{value}/g'.format(value=case["ts"]/4),fname]
+
+            print(totaltime)
+            print(tstep)
+
+            subprocess.run(totaltime)
+            subprocess.run(tstep)
