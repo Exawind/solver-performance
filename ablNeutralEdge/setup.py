@@ -4,7 +4,7 @@ Run this to generate the input files
 You will need aprepro in the path when you execute
 
 'python setup.py' will generate the ablNeutralEdge cases
-'python setup.py /absolute/path/to/installed/reg_test/for/nrewl5MWactuatorLine' will
+'python setup.py /absolute/path/to/build/dir' will
 generate the actuatorLine cases
 """
 import sys
@@ -24,14 +24,20 @@ output_file = "{base}_{ms}m_sgs2_CFL_485.yaml"
 if len(sys.argv) > 1:
     use_actuator = True
     base_name = "nrel5MWactuatorLine"
-    nrel5mw_base_dir = sys.argv[1]
+    nrel5mw_base_dir = os.path.join(sys.argv[1],"reg_tests/test_files/nrel5MWactuatorLine")
 
     with open(os.path.join(nrel5mw_base_dir, '5MW_Baseline','NRELOffshrBsline5MW_Onshore_ServoDyn.dat'), 'r') as source:
         fname = 'ServoDyn.dat'
         with open(fname, 'w') as target:
             data = source.read()
-            pcmode = data.replace(r"5   PCMode", r"0   PCMode")
-            target.write(pcmode)
+            data = data.replace(r"5   PCMode", r"0   PCMode")
+            data = data.replace(r"2   GenModel", r"1   GenModel")
+            data = data.replace(r"5   VSContrl", r"1   VSContrl")
+            data = data.replace(r"9999.9   VS_RtGnSp", r"1161.96   VS_RtGnSp")
+            data = data.replace(r"9999.9   VS_RtTq", r"43093.55   VS_RtTq")
+            data = data.replace(r"9999.9   VS_Rgn2K", r"0.025576   VS_Rgn2K")
+            data = data.replace(r"9999.9   VS_SlP", r"10.0   VS_SlP")
+            target.write(data)
 else:
     use_actuator = ""
     base_name = "ablNeutralEdge"
@@ -58,6 +64,6 @@ for case in cases:
                 with open(fname, 'w') as target:
                     totaltime = data.replace(r"0.62500", str(case["ts"]*10))
                     timestep = totaltime.replace(r"0.00625", str(case["ts"]/4))
-                    print(nrel5mw_base_dir + r'/5MW_Baseline/NRELOffshrBsline5MW_Onshore_ServoDyn.dat')
-                    servofile = timestep.replace(os.path.join(nrel5mw_base_dir, r'5MW_Baseline','NRELOffshrBsline5MW_Onshore_ServoDyn.dat'),'ServoDyn.dat')
+                    chkpt = timestep.replace(r"0.0625", str(case["ts"]*10))
+                    servofile = chkpt.replace(os.path.join(nrel5mw_base_dir, r'5MW_Baseline','NRELOffshrBsline5MW_Onshore_ServoDyn.dat'),'ServoDyn.dat')
                     target.write(servofile)
