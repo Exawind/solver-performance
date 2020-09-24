@@ -15,9 +15,6 @@ mesh_size = ["02", "05", "10", "20", "40"]
 time_step = [0.15,  0.3,  0.6,  1.2,  2.4]
 cases = []
 
-for i in range(len(mesh_size)):
-    cases.append({"ms" : mesh_size[i], "ts" : time_step[i]})
-
 input_file = "input.yaml"
 output_file = "{base}_{ms}m_sgs2_CFL_485.yaml"
 
@@ -25,6 +22,7 @@ if len(sys.argv) > 1:
     use_actuator = True
     base_name = "nrel5MWactuatorLine"
     nrel5mw_base_dir = os.path.join(sys.argv[1],"reg_tests/test_files/nrel5MWactuatorLine")
+    time_step_scaling = 1e-1
 
     with open(os.path.join(nrel5mw_base_dir, '5MW_Baseline','NRELOffshrBsline5MW_Onshore_ServoDyn.dat'), 'r') as source:
         fname = 'ServoDyn.dat'
@@ -41,6 +39,10 @@ if len(sys.argv) > 1:
 else:
     use_actuator = ""
     base_name = "ablNeutralEdge"
+    time_step_scaling = 1.0
+
+for i in range(len(mesh_size)):
+    cases.append({"ms" : mesh_size[i], "ts" : time_step[i]*time_step_scaling})
 
 for case in cases:
     command = ["aprepro", "-c#", "meshsize='{ms}'".format(ms=case["ms"]),
@@ -63,7 +65,7 @@ for case in cases:
                 fname = "nrel5mw_{ind}_{ms}.fst".format(ms=case["ms"], ind=i)
                 with open(fname, 'w') as target:
                     totaltime = data.replace(r"0.62500", str(case["ts"]*10))
-                    timestep = totaltime.replace(r"0.00625", str(case["ts"]/4))
+                    timestep = totaltime.replace(r"0.00625", str(case["ts"]/10))
                     chkpt = timestep.replace(r"0.0625", str(case["ts"]*10))
                     servofile = chkpt.replace(os.path.join(nrel5mw_base_dir, r'5MW_Baseline','NRELOffshrBsline5MW_Onshore_ServoDyn.dat'),'ServoDyn.dat')
                     target.write(servofile)
