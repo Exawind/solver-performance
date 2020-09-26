@@ -35,7 +35,7 @@ realms:
 
   # The fluid realm that uses the 5 km x 5 km x 1 km atmospheric LES mesh.
   - name: fluidRealm
-    mesh: /gpfs/alpine/cfd116/proj-shared/meshes/ablNeutralEdge/10m/abl_5km_5km_1km_neutral_10m.g
+    mesh: /gpfs/alpine/cfd116/proj-shared/meshes/ablNeutralEdge/{meshsize}m/abl_5km_5km_1km_neutral_{meshsize}m.g
     use_edges: yes
     automatic_decomposition_type: rcb
 
@@ -200,6 +200,9 @@ realms:
               - buoyancy_boussinesq
               - EarthCoriolis
               - abl_forcing
+{if(use_actuator)}
+              - actuator
+{endif}
             turbulent_ke:
               - rodi
 
@@ -237,7 +240,10 @@ realms:
         # from the Exodus mesh/field file.
         #- input_variables_from_file:
         #    temperature: temperature
-
+        #
+{if(use_actuator)}
+{include(actuator.yaml)}
+{endif}
 
     output:
       output_data_base_name: out/abl_5km_5km_1km_neutral.e
@@ -250,6 +256,9 @@ realms:
        - enthalpy
        - temperature
        - turbulent_ke
+{if(use_actuator)}
+       - actuator_source
+{endif}
 
     # Compute spatial averages of velocity and temperature at all height levels
     # available on the ABL mesh. This is used for post-processing as well as
@@ -290,7 +299,7 @@ Time_Integrators:
       name: ti_1
       start_time: 0.0
       termination_step_count: 10
-      time_step: 0.6
+      time_step: {timestep}
       time_stepping_type: fixed
       time_step_count: 0
       second_order_accuracy: yes
