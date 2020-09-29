@@ -35,7 +35,7 @@ realms:
 
   # The fluid realm that uses the 5 km x 5 km x 1 km atmospheric LES mesh.
   - name: fluidRealm
-    mesh: /gpfs/alpine/cfd116/proj-shared/meshes/ablNeutralEdge/{meshsize}m/abl_5km_5km_1km_neutral_{meshsize}m.g
+    mesh: {meshfile}
     use_edges: yes
     automatic_decomposition_type: rcb
 
