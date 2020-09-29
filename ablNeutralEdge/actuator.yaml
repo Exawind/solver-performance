@@ -3,7 +3,7 @@
       search_method: stk_kdtree
       search_target_part: fluid
 
-      n_turbines_glob: 2
+      n_turbines_glob: {nturbines}
       debug:    False
       simStart: init
       t_start: 0.0
@@ -11,28 +11,21 @@
       dt_fast: {timestep/10}
       n_every_checkpoint: 100
 
-      Turbine0:
-        num_force_pts_blade: 50
-        num_force_pts_tower: 20
-        nacelle_cd: 1.0
-        nacelle_area: 8.0
-        air_density: 1.225
-        epsilon: [ 5.0, 5.0, 5.0 ]
-        turbine_base_pos: [ 1500.0, 1500.0, 0.0 ]
-        restart_filename: "blah"
-        fast_input_filename: "nrel5mw_1_{meshsize}.fst"
-        turb_id:  1
-        turbine_name: machine_one
+{NOECHO} {_j=0}
+{loop(nturbines)}
+{NOECHO} {_k=_j+1}
+{ECHO}   Turbine{_j}:
+{ECHO}        num_force_pts_blade: 50
+{ECHO}        num_force_pts_tower: 20
+{ECHO}        nacelle_cd: 1.0
+{ECHO}        nacelle_area: 8.0
+{ECHO}        air_density: 1.225
+{ECHO}        epsilon: {epsilon}
+{ECHO}        turbine_base_pos: [ {0.5*length*_k}, {0.5*length}, 0.0 ]
+{ECHO}        restart_filename: "blah"
+{ECHO}        fast_input_filename: "nrel5mw_{_k}_{meshsize}.fst"
+{ECHO}        turb_id: {_k}
+{ECHO}        turbine_name: machine_{_k}
+{NOECHO} {++_j}
+{endloop}
 
-      Turbine1:
-        num_force_pts_blade: 50
-        num_force_pts_tower: 20
-        nacelle_cd: 1.0
-        nacelle_area: 8.0
-        air_density: 1.225
-        epsilon: [ 5.0, 5.0, 5.0 ]
-        turbine_base_pos: [ 1650.0, 1650.0, 0.0 ]
-        restart_filename: "blah"
-        fast_input_filename: "nrel5mw_2_{meshsize}.fst"
-        turb_id:  2
-        turbine_name: machine_two

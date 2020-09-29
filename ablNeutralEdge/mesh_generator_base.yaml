@@ -1,0 +1,12 @@
+nalu_abl_mesh:
+  mesh_type: generate_ablmesh
+  output_db: abl_l{xlen}x{ylen}x{zlen}m_n{meshsize}m.g
+
+  spec_type: bounding_box
+  vertices:
+    - [0.0, 0.0, 0.0]
+    - [{xlen}, {ylen}, {zlen}]
+
+  mesh_dimensions: [{xlen/meshsize}, {ylen/meshsize}, {zlen/meshsize}]
+  zmin_boundary_name: lower
+  zmax_boundary_name: upper
