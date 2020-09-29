@@ -83,7 +83,7 @@ if __name__ == '__main__':
 
         # add weak scaling growing domain to cases
         for i in range(max_num_actuators):
-            cases.append({"ms" : 100,
+            cases.append({"ms" : 10,
                          "ts" : 0.6,
                          "numAct" : 2**i,
                          "genMesh" : True,
