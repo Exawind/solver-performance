@@ -103,17 +103,21 @@ if __name__ == '__main__':
     for case in cases:
         if case["genMesh"]:
             # construct able_mesh input
+            xlen = case["lengthScale"]*case["numAct"]
+            ylen = case["lengthScale"]
+            zlen = case["lengthScale"]
             command = ["aprepro", "-c#",
-                       "xlen={x}".format(x=case["lengthScale"]*case["numAct"]),
-                       "ylen={y}".format(y=case["lengthScale"]),
-                       "zlen={z}".format(z=case["lengthScale"]),
+                       "xlen={x}".format(x=xlen),
+                       "ylen={y}".format(y=ylen),
+                       "zlen={z}".format(z=zlen),
                        "meshsize={ms}".format(ms=case["ms"]),
                        "mesh_generator_base.yaml",
                        "abl_mesh_inp{nt}.yaml".format(nt=case["numAct"])]
             run_command(command)
+            case["mf"] = case["mf"].format(xlen=int(xlen), ylen=int(ylen), zlen=int(zlen), meshsize=int(case["ms"]))
 
             # generate mesh file
-            run_command(["abl_mesh", "-i", "abl_run{nt}.yaml".format(nt=case["numAct"])])
+            run_command(["abl_mesh", "-i", "abl_mesh_inp{nt}.yaml".format(nt=case["numAct"])])
 
 
         # construct input deck

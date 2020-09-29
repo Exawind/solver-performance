@@ -14,7 +14,7 @@
 {NOECHO} {_j=0}
 {loop(nturbines)}
 {NOECHO} {_k=_j+1}
-{ECHO}   Turbine{_j}:
+{ECHO}      Turbine{_j}:
 {ECHO}        num_force_pts_blade: 50
 {ECHO}        num_force_pts_tower: 20
 {ECHO}        nacelle_cd: 1.0
