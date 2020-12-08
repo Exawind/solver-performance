@@ -128,7 +128,7 @@ if __name__ == '__main__':
                    "meshfile={mf}".format(mf=case["mf"]),
                    "meshsize='{ms}'".format(ms=case["ms"]),
                    "timestep={ts}".format(ts=case["ts"]),
-                   "use_actuator={ua}".format(ua=use_actuator),
+                   "use_actuator={ua}".format(ua=int(use_actuator)),
                    "epsilon={eps}".format(eps=case["epsilon"]),
                    "length={l}".format(l=case["lengthScale"]),
                    "nturbines={nt}".format(nt=case["numAct"]),
